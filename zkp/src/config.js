@@ -37,6 +37,30 @@ export default {
   BATCH_PROOF_SIZE: 20, // the number of proofs in a batch (you will need to redo the proofs if you change this)
 
   // *****
+  // the various parameters needed to describe the Babyjubjub curve that we use for El-Gamal
+  BABYJUBJUB: {
+    JUBJUBA: BigInt(168700),
+    JUBJUBD: BigInt(168696),
+    INFINITY: [BigInt(0), BigInt(1)],
+    GENERATOR: [
+      BigInt('16540640123574156134436876038791482806971768689494387082833631921987005038935'),
+      BigInt('20819045374670962167435360035096875258406992893633759881276124905556507972311'),
+    ],
+    JUBJUBE: BigInt(
+      '21888242871839275222246405745257275088614511777268538073601725287587578984328',
+    ),
+    JUBJUBC: BigInt(8),
+    MONTA: BigInt(168698),
+    MONTB: BigInt(1),
+  },
+  // Private keys we can use for test purposes
+  TEST_PRIVATE_KEYS: [
+    BigInt('1725287587578984328'),
+    BigInt('1451177726853807360'),
+    BigInt('2464057452572750886'),
+  ],
+
+  // *****
 
   ZOKRATES_PRIME: '21888242871839275222246405745257275088548364400416034343698204186575808495617', // decimal representation of the prime p of GaloisField(p)
   // NOTE: 2^253 < ZOKRATES_PRIME < 2^254 - so we must use 253bit numbers to be safe (and lazy) - let's use 248bit numbers (because hex numbers ought to be an even length, and 8 divides 248 (248 is 31 bytes is 62 hex numbers))
