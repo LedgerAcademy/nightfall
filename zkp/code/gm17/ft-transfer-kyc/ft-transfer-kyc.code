@@ -199,7 +199,8 @@ def main(field publicInputHash, private field valueC, private field[2] secretKey
 
 	// And the encryption of the transaction (extend the value up to 256 bits)
 	field[8] w = enc3([...[0;128], ...valueE], publicKeyABits, publicKeyBBits, authorityPublicKey1, authorityPublicKey2, authorityPublicKey3, randomSecret)
-
+	// check the encryption has been computed correctly
+	w == encryption
 
 	// And commitmentF
 	preimage640 = concatenate128x256x256(valueFBits, publicKeyABits, saltFBits)
