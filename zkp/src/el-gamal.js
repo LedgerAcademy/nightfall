@@ -8,7 +8,7 @@ import utils from './zkpUtils';
 
 // const utils = require('zkp-utils')('/app/config/stats.json');
 
-const { BABYJUBJUB, ZOKRATES_PRIME } = config;
+const { BABYJUBJUB, ZOKRATES_PRIME, TEST_PRIVATE_KEYS } = config;
 const one = BigInt(1);
 const { JUBJUBE, JUBJUBC, GENERATOR } = BABYJUBJUB;
 const Fp = BigInt(ZOKRATES_PRIME); // the prime field used with the curve E(Fp)
@@ -76,7 +76,9 @@ function setAuthorityPublicKeys() {
 /** function to set the private keys used by the authority for decryption
 @param {Array(String)} keys - array of hex private key strings
 */
-export function setAuthorityPrivateKeys(keys) {
+export function setAuthorityPrivateKeys(keys = TEST_PRIVATE_KEYS) {
+  if (keys[0] === TEST_PRIVATE_KEYS[0])
+    console.log('DANGER, WILL ROBINSON! INSECURE TEST-KEYS ARE BEING USED!');
   for (let i = 0; i < keys.length; i++) {
     AUTHORITY_PRIVATE_KEYS.push(utils.ensure0x(keys[i]));
   }
@@ -105,13 +107,16 @@ export function enc(randomSecret, ...strings) {
   // finally, we can encrypt the messages using the share secrets
   const c0 = scalarMult(randomSecret, GENERATOR);
   const encryptedMessages = messages.map((e, i) => add(e, sharedSecrets[i]));
-  return { c0, encryptedMessages };
+  const encryption = [...c0, ...encryptedMessages];
+  return encryption;
 }
 
 /**
 Decrypt the above
 */
-export function dec(c0, encryptedMessages) {
+export function dec(encryption) {
+  const c0 = encryption[0];
+  const encryptedMessages = encryption.slice(1);
   // recover the shared secrets
   const sharedSecrets = AUTHORITY_PRIVATE_KEYS.map(e => {
     if (e === undefined) throw new Error('Trying to decrypt with a undefined private key');
