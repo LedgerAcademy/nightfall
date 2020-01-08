@@ -199,7 +199,7 @@ def main(field publicInputHash, private field valueC, private field[2] secretKey
 
 	// And the encryption of the transaction (extend the value up to 256 bits)
 	field[8] w = enc3([...[0;128], ...valueE], publicKeyABits, publicKeyBBits, authorityPublicKey1, authorityPublicKey2, authorityPublicKey3, randomSecret)
-	
+
 
 	// And commitmentF
 	preimage640 = concatenate128x256x256(valueFBits, publicKeyABits, saltFBits)
@@ -207,10 +207,6 @@ def main(field publicInputHash, private field valueC, private field[2] secretKey
 	preimage1024 = [...preimage640, ...padding640To1024]
 
 	field[256] commitmentFBitsCheck = sha256of1024(preimage1024[0..256], preimage1024[256..512], preimage1024[512..768], preimage1024[768..1024]) // commitmentF
-
-	// +prove that we have correctly encrypted details of our transaction with Bob
-	field W = enc(valueE, pack128(publicKeyABits[0..128]), pack128(publicKeyABits[128..256]),  pack128(publicKeyBBits[0..128]), pack128(publicKeyBBits[128..256]))
-
 
 	// Sum check C+D = E+F - we don't want anyone to create money.
 
